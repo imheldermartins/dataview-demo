@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Cub's | Demo</title>
+</head>
+
+<body>
+
+    <h1>Componente <code>&lt;DataView/&gt;</code></h1>
+
+    <div class="app-container">
+
+        <div class="controls-header">
+            <div class="controls-views">
+                <select class="btn-ui view-selector" id="view-selector">
+                    <option value="table">Tabela</option>
+                    <option value="board">Quadro</option>
+                </select>
+            </div>
+
+            <div class="controls-actions">
+                <div id="groupby-container" class="hidden">
+                    <button class="btn-ui" id="btn-toggle-groupby">
+                        Agrupar: <span id="current-group-label" style="font-weight: bold; margin-left: 4px;"></span>
+                    </button>
+                </div>
+
+                <button class="btn-filters" id="btn-toggle-filters">
+                    <span id="filter-count"></span> Filtros
+                </button>
+            </div>
+
+            <!-- Popovers -->
+            <div class="popover-menu filter-menu" id="filter-menu">
+                <div id="filter-rules-container"></div>
+                <button class="btn-add-rule" id="btn-add-rule">+ Adicionar filtro</button>
+            </div>
+
+            <div class="popover-menu filter-menu" id="groupby-menu">
+                <div style="font-size: 0.8rem; color: #969696; margin-bottom: 4px;">Agrupar cartões por:</div>
+                <select id="groupby-select" class="popover-select">
+                    <!-- Preenchido via JS -->
+                </select>
+            </div>
+        </div>
+
+        <!-- Visão 1: Tabela -->
+        <div class="table-container" id="view-table">
+            <table id="dynamic-table">
+                <thead>
+                    <tr id="table-headers"></tr>
+                </thead>
+                <tbody id="table-body">
+                    <tr>
+                        <td class="loading" colspan="100%">Carregando dados da tabela...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Visão 2: Quadro (Board/Kanban) -->
+        <div class="board-container hidden" id="view-board">
+            <!-- Colunas criadas dinamicamente -->
+        </div>
+
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

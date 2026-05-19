@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cub's | Demo</title>
+
+    <style>
+        :root {
+            --input-checkbox: rgb(26, 119, 206);
+            --text-grey: rgb(74, 76, 92);
+            --text-blue: rgb(27, 56, 134);
+            --text-yellow: rgb(114, 112, 21);
+            --text-green: rgb(27, 139, 55);
+
+            --bg-grey: rgba(121, 124, 148, 0.3);
+            --bg-blue: rgba(55, 97, 214, 0.3);
+            --bg-yellow: rgba(255, 252, 72, 0.5);
+            --bg-green: rgba(36, 255, 91, 0.3);
+
+            --transparent: transparent;
+        }
+
+        /* Estilização Geral */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #343a40;
+            margin-bottom: 24px;
+            font-size: 1.8rem;
+        }
+
+        /* Container Principal */
+        .app-container {
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+        }
+
+        /* --- Cabeçalho de Controles e Filtro --- */
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .controls-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-ui {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #495057;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: background 0.2s;
+            outline: none;
+        }
+
+        .btn-ui:hover {
+            background-color: #f7f7f7;
+        }
+        
+        .btn-filters {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #495057;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: background 0.2s;
+        }
+
+        .btn-filters:hover {
+            background-color: #f7f7f7;
+        }
+
+        /* Menus Flutuantes (Popovers) */
+        .popover-menu {
+            position: absolute;
+            top: 40px;
+            background-color: #f7f7f7;
+            color: #969696;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            border: 1px solid #dddddd;
+        }
+
+        .popover-menu.active {
+            display: flex;
+        }
+
+        #filter-menu { right: 0; min-width: 450px; }
+        #groupby-menu { right: 100px; min-width: 200px; }
+
+        .filter-rule {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #eeeeee;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #dddddd;
+        }
+
+        .filter-label {
+            font-size: 0.85rem;
+            color: #969696;
+            width: 50px;
+        }
+
+        .filter-rule select,
+        .filter-rule input,
+        .popover-select {
+            background-color: #e7e7e7;
+            color: #777777;
+            border: 1px solid #dddddd;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        
+        .popover-select { width: 100%; }
+
+        .filter-rule select:focus,
+        .filter-rule input:focus,
+        .popover-select:focus {
+            border-color: #58a6ff;
+        }
+
+        .btn-remove-filter {
+            background: transparent;
+            border: none;
+            color: #969696;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: auto;
+        }
+
+        .btn-remove-filter:hover {
+            color: #f85149;
+        }
+
+        .btn-add-rule {
+            background: transparent;
+            border: none;
+            color: #969696;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.85rem;
+            padding: 4px 0;
+            width: fit-content;
+        }
+
+        .btn-add-rule:hover {
+            color: #878787;
+        }
+        
+        .hidden { display: none !important; }
+
+        /* Container da Tabela */
+        .table-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        thead {
+            background-color: #f1f3f5;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        th {
+            padding: 14px 16px;
+            font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        td {
+            padding: 14px 16px;
+            color: #495057;
+            vertical-align: middle;
+        }
+
+        /* Componentes Customizados */
+        .custom-select {
+            appearance: none;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: opacity 0.2s;
+        }
+
+        .custom-select:hover {
+            opacity: 0.8;
+        }
+
+        .color-grey { background-color: var(--bg-grey); color: var(--text-grey); }
+        .color-blue { background-color: var(--bg-blue); color: var(--text-blue); }
+        .color-yellow { background-color: var(--bg-yellow); color: var(--text-yellow); }
+        .color-green { background-color: var(--bg-green); color: var(--text-green); }
+        .color-transparent { background-color: var(--transparent); color: inherit; border: 1px dashed #ccc; }
+
+        .custom-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--input-checkbox);
+            margin: 0;
+            display: block;
+        }
+
+        .custom-date {
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            color: #495057;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .custom-date:focus {
+            border-color: var(--text-blue);
+        }
+
+        .loading {
+            padding: 20px;
+            text-align: center;
+            color: #868e96;
+        }
+
+        /* --- VISUALIZAÇÃO: Quadro (Board) --- */
+        .board-container {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+            min-height: 400px;
+        }
+
+        .board-col {
+            min-width: 280px;
+            width: 280px;
+            background-color: #f1f3f5;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .board-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #495057;
+            padding: 4px 0;
+            margin-bottom: 4px;
+        }
+
+        .board-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .board-count {
+            color: #adb5bd;
+            font-size: 0.85rem;
+            margin-left: auto;
+            font-weight: 500;
+        }
+
+        .board-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+
+        .board-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .board-card-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #212529;
+        }
+
+        .board-card-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .board-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* --- VISUALIZAÇÃO: Calendário Linhas Contínuas (Ribbons) --- */
+        .calendar-container {
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        /* Grid Header (Dias da Semana) */
+        .calendar-grid-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border-top: 1px solid #dee2e6;
+            border-left: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .calendar-day-name {
+            text-align: center;
+            font-weight: 600;
+            color: #868e96;
+            font-size: 0.85rem;
+            padding: 10px 0;
+            text-transform: uppercase;
+            border-right: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+        }
+        .calendar-day-name:last-child {
+            border-right: none;
+        }
+        
+        /* O Corpo que empilha as semanas */
+        #calendar-grid-body {
+            border-right: 1px solid #dee2e6;
+            border-bottom: 1px solid #dee2e6;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            overflow: hidden;
+        }
+
+        /* Cada linha (semana) tem um grid autônomo */
+        .calendar-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border-left: 1px solid #dee2e6;
+            border-top: 1px solid #dee2e6;
+            min-height: 120px;
+        }
+
+        /* Os Fundo dos dias e números */
+        .calendar-day-bg {
+            border-right: 1px solid #dee2e6;
+            background-color: #ffffff;
+            z-index: 1; /* Atrás dos ribbons */
+        }
+        .calendar-day-bg.last-col {
+            border-right: none;
+        }
+        .calendar-day-bg.empty {
+            background-color: #fcfcfc;
+        }
+        .calendar-day-bg.today {
+            background-color: #f0f7ff;
+        }
+        
+        .calendar-day-num {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #adb5bd;
+            text-align: right;
+            padding: 8px 8px 2px 8px;
+            z-index: 2;
+        }
+        .calendar-day-num.today {
+            color: #58a6ff;
+            font-weight: 700;
+        }
+        
+        /* Eventos no CSS Grid (As Linhas Contínuas / Ribbons) */
+        .calendar-event {
+            margin: 2px 6px; /* Espaço para não tocar as extremidades */
+            padding: 6px 10px;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            text-decoration: none;
+        }
+
+        .calendar-event:hover {
+            z-index: 10;
+            filter: brightness(0.95);
+        }
+
+        /* Classes que removem as bordas/margin para emendar a linha */
+        .calendar-event.span-left {
+            margin-left: 0;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-left: none;
+            padding-left: 16px; /* Compensa a margem perdida */
+        }
+
+        .calendar-event.span-right {
+            margin-right: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+            padding-right: 16px;
+        }
+
+        .calendar-event-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .calendar-event-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Componente <code>&lt;DataView/&gt;</code></h1>
+
+    <div class="app-container">
+
+        <div class="controls-header">
+            <div class="controls-views">
+                <select class="btn-ui view-selector" id="view-selector">
+                    <option value="table">📋 Tabela</option>
+                    <option value="board">📊 Quadro</option>
+                    <option value="calendar">📅 Calendário</option>
+                </select>
+            </div>
+
+            <div class="controls-actions">
+                <!-- Mostrado apenas no Board -->
+                <div id="groupby-container" class="hidden">
+                    <button class="btn-ui" id="btn-toggle-groupby">
+                        Agrupar: <span id="current-group-label" style="font-weight: bold; margin-left: 4px;"></span>
+                    </button>
+                </div>
+
+                <button class="btn-filters" id="btn-toggle-filters">
+                    <span id="filter-count"></span> Filtros
+                </button>
+            </div>
+
+            <!-- Popovers -->
+            <div class="popover-menu filter-menu" id="filter-menu">
+                <div id="filter-rules-container"></div>
+                <button class="btn-add-rule" id="btn-add-rule">+ Adicionar filtro</button>
+            </div>
+
+            <div class="popover-menu filter-menu" id="groupby-menu">
+                <div style="font-size: 0.8rem; color: #969696; margin-bottom: 4px;">Agrupar cartões por:</div>
+                <select id="groupby-select" class="popover-select">
+                    <!-- Preenchido via JS -->
+                </select>
+            </div>
+        </div>
+
+        <!-- Visão 1: Tabela -->
+        <div class="table-container" id="view-table">
+            <table id="dynamic-table">
+                <thead>
+                    <tr id="table-headers"></tr>
+                </thead>
+                <tbody id="table-body">
+                    <tr>
+                        <td class="loading" colspan="100%">Carregando dados da tabela...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Visão 2: Quadro (Board/Kanban) -->
+        <div class="board-container hidden" id="view-board">
+            <!-- Colunas criadas dinamicamente -->
+        </div>
+
+        <!-- Visão 3: Calendário -->
+        <div class="calendar-container hidden" id="view-calendar">
+            <div class="calendar-header">
+                <button class="btn-ui" id="btn-prev-month">&lt;</button>
+                <h2 id="calendar-month-year" style="margin:0; font-size:1.2rem; color:#343a40;"></h2>
+                <button class="btn-ui" id="btn-next-month">&gt;</button>
+            </div>
+            
+            <div class="calendar-grid-header">
+                <div class="calendar-day-name">Dom</div>
+                <div class="calendar-day-name">Seg</div>
+                <div class="calendar-day-name">Ter</div>
+                <div class="calendar-day-name">Qua</div>
+                <div class="calendar-day-name">Qui</div>
+                <div class="calendar-day-name">Sex</div>
+                <div class="calendar-day-name">Sáb</div>
+            </div>
+            
+            <div id="calendar-grid-body">
+                <!-- Semanas renderizadas via JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        let globalData = { cols: [], rows: [] };
+        let activeFilters = [];
+        let currentView = 'table';
+        let currentGroupColId = null; 
+        
+        // Estado do Calendário
+        let calendarCurrentDate = new Date();
+
+        // --- 1. Parser ---
+        function parseTable(rawData) {
+            const colsMap = new Map();
+            colsMap.set('page_title', { id: 'page_title', name: 'Título da Página', type: 'text' });
+
+            const rows = rawData.reduce((acc, item) => {
+                let pageCols = item.page_columns;
+                if (typeof pageCols === 'string') {
+                    try { pageCols = JSON.parse(pageCols); } catch (e) { pageCols = {}; }
+                }
+
+                const row = { id: item.page_id, page_title: item.page_title };
+
+                if (pageCols && typeof pageCols === 'object') {
+                    Object.entries(pageCols).forEach(([colId, colDef]) => {
+                        if (!colsMap.has(colId)) {
+                            let options = [];
+                            if (colDef.column_type === 'select' && colDef.column_data) {
+                                try {
+                                    const colDataParsed = typeof colDef.column_data === 'string' ? JSON.parse(colDef.column_data) : colDef.column_data;
+                                    options = colDataParsed.options || [];
+                                } catch(e) {}
+                            }
+                            colsMap.set(colId, { id: colId, name: colDef.column_name, type: colDef.column_type, options: options });
+                        }
+
+                        let cellData = {};
+                        if (typeof colDef.row_data === 'string') {
+                            try { cellData = JSON.parse(colDef.row_data); } catch (e) { }
+                        } else if (colDef.row_data) {
+                            cellData = colDef.row_data;
+                        }
+                        row[colId] = cellData.value !== undefined ? cellData.value : null;
+                    });
+                }
+                acc.push(row);
+                return acc;
+            }, []);
+
+            return { cols: Array.from(colsMap.values()), rows: rows };
+        }
+
+        // Helpers de Formatação
+        function formatForDateTimeLocal(isoString) {
+            if (!isoString) return '';
+            const dStr = isoString.split('@')[0];
+            const d = new Date(dStr);
+            if (isNaN(d.getTime())) return '';
+            const offset = d.getTimezoneOffset() * 60000; 
+            return (new Date(d - offset)).toISOString().slice(0, 16);
+        }
+
+        function formatForDisplay(isoString) {
+            if (!isoString) return '';
+            const parts = isoString.split('@');
+            
+            if (parts.length === 2) {
+                const d1 = new Date(parts[0]).toLocaleDateString('pt-BR');
+                const d2 = new Date(parts[1]).toLocaleDateString('pt-BR');
+                return `${d1} - ${d2}`;
+            }
+            
+            const d = new Date(isoString);
+            return d.toLocaleDateString('pt-BR');
+        }
+
+        // --- 2. Lógica do 'Group By' ---
+        function initGroupSelector() {
+            const selectElement = document.getElementById('groupby-select');
+            const groupableCols = globalData.cols.filter(c => c.type === 'select' || c.type === 'checkbox');
+            
+            selectElement.innerHTML = groupableCols.map(col => 
+                `<option value="${col.id}">${col.name}</option>`
+            ).join('');
+
+            if (groupableCols.length > 0) {
+                currentGroupColId = groupableCols[0].id;
+                selectElement.value = currentGroupColId;
+                updateGroupLabel();
+            }
+        }
+
+        function updateGroupLabel() {
+            const col = globalData.cols.find(c => c.id === currentGroupColId);
+            document.getElementById('current-group-label').textContent = col ? col.name : '';
+        }
+
+        // --- 3. Filtros ---
+        function getFilterValueInputHtml(filterId, col) {
+            if (!col) return '';
+            const filter = activeFilters.find(f => f.id === filterId);
+            const val = filter.value || '';
+
+            if (col.type === 'select') {
+                return `
+                    <select class="filter-value-input" data-filter-id="${filterId}">
+                        <option value="" disabled ${!val ? 'selected' : ''}>Selecione...</option>
+                        ${col.options.map(o => `<option value="${o.id}" ${val === o.id ? 'selected' : ''}>${o.value}</option>`).join('')}
+                    </select>
+                `;
+            }
+            if (col.type === 'checkbox') {
+                return `
+                    <select class="filter-value-input" data-filter-id="${filterId}">
+                        <option value="" disabled ${!val ? 'selected' : ''}>Selecione...</option>
+                        <option value="true" ${String(val) === 'true' ? 'selected' : ''}>Sim</option>
+                        <option value="false" ${String(val) === 'false' ? 'selected' : ''}>Não</option>
+                    </select>
+                `;
+            }
+            if (col.type === 'numeric') {
+                return `<input type="number" class="filter-value-input" data-filter-id="${filterId}" value="${val}" placeholder="Número..." />`;
+            }
+            
+            return `<input type="text" class="filter-value-input" data-filter-id="${filterId}" value="${val}" placeholder="Texto..." />`;
+        }
+
+        function renderFilterMenu() {
+            const container = document.getElementById('filter-rules-container');
+            const countSpan = document.getElementById('filter-count');
+            
+            countSpan.textContent = activeFilters.length > 0 ? `(${activeFilters.length})` : '';
+
+            if (activeFilters.length === 0) {
+                container.innerHTML = '<span style="font-size: 0.85rem; color:#8b949e;">Nenhum filtro aplicado.</span>';
+                return;
+            }
+
+            container.innerHTML = activeFilters.map((filter, index) => {
+                const selectedCol = globalData.cols.find(c => c.id === filter.colId);
+                const isFirst = index === 0;
+
+                let operatorOptions = `<option value="equals" ${filter.operator === 'equals' ? 'selected' : ''}>Igual</option>`;
+                if (!selectedCol || selectedCol.type === 'text') {
+                    operatorOptions += `<option value="contains" ${filter.operator === 'contains' ? 'selected' : ''}>Contém</option>`;
+                }
+
+                return `
+                    <div class="filter-rule">
+                        <span class="filter-label">${isFirst ? 'Onde' : 'And'}</span>
+                        
+                        <select class="filter-col-select" data-filter-id="${filter.id}" style="width:130px;">
+                            <option value="" disabled ${!filter.colId ? 'selected' : ''}>Coluna...</option>
+                            ${globalData.cols.filter(c => c.type !== 'date').map(col => 
+                                `<option value="${col.id}" ${filter.colId === col.id ? 'selected' : ''}>${col.name}</option>`
+                            ).join('')}
+                        </select>
+
+                        <select class="filter-operator-select" data-filter-id="${filter.id}" style="width:100px;">
+                            ${operatorOptions}
+                        </select>
+
+                        ${getFilterValueInputHtml(filter.id, selectedCol)}
+
+                        <button class="btn-remove-filter" data-filter-id="${filter.id}">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- 4. Motor Principal de Renderização ---
+        function applyFiltersAndRender() {
+            let filteredRows = globalData.rows;
+
+            if (activeFilters.length > 0) {
+                filteredRows = globalData.rows.filter(row => {
+                    return activeFilters.every(filter => {
+                        if (!filter.colId || filter.value === null || filter.value === '') return true;
+
+                        const cellValue = row[filter.colId];
+                        const filterVal = filter.value;
+
+                        if (filter.operator === 'equals') {
+                            return String(cellValue).toLowerCase() === String(filterVal).toLowerCase();
+                        } else if (filter.operator === 'contains') {
+                            if (cellValue === null || cellValue === undefined) return false;
+                            return String(cellValue).toLowerCase().includes(String(filterVal).toLowerCase());
+                        }
+                        return true;
+                    });
+                });
+            }
+
+            if (currentView === 'table') {
+                renderTable(globalData.cols, filteredRows);
+            } else if (currentView === 'board') {
+                renderBoard(globalData.cols, filteredRows);
+            } else if (currentView === 'calendar') {
+                renderCalendar(globalData.cols, filteredRows);
+            }
+        }
+
+        // Visão 1: Tabela (Editável)
+        function renderTable(cols, rows) {
+            const headersRow = document.getElementById('table-headers');
+            const tableBody = document.getElementById('table-body');
+
+            headersRow.innerHTML = cols.map(col => `<th>${col.name}</th>`).join('');
+
+            if (rows.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="100%" class="loading">Nenhum resultado encontrado.</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = rows.map(row => {
+                const cellsHtml = cols.map(col => {
+                    const cellValue = row[col.id];
+                    let displayValue = cellValue;
+
+                    if (col.type === 'select') {
+                        const selectedOption = col.options.find(opt => opt.id === cellValue);
+                        const bgColorClass = selectedOption ? `color-${selectedOption.color}` : 'color-transparent';
+                        const optionsHtml = col.options.map(opt => 
+                            `<option value="${opt.id}" data-color="${opt.color}" ${opt.id === cellValue ? 'selected' : ''}>${opt.value}</option>`
+                        ).join('');
+
+                        displayValue = `
+                            <select class="custom-select ${bgColorClass}" onchange="this.className = 'custom-select color-' + this.options[this.selectedIndex].getAttribute('data-color')">
+                                <option value="" disabled ${!cellValue ? 'selected' : ''}>Selecione...</option>
+                                ${optionsHtml}
+                            </select>
+                        `;
+                    } 
+                    else if (col.type === 'checkbox') {
+                        displayValue = `<input type="checkbox" class="custom-checkbox" ${cellValue === true ? 'checked' : ''} />`;
+                    } 
+                    else if (col.type === 'date') {
+                        if (cellValue && String(cellValue).includes('@')) {
+                            const parts = cellValue.split('@');
+                            displayValue = `
+                                <div style="display:flex; flex-direction:column; gap:4px;">
+                                    <input type="datetime-local" class="custom-date" value="${formatForDateTimeLocal(parts[0])}" title="Início" />
+                                    <input type="datetime-local" class="custom-date" value="${formatForDateTimeLocal(parts[1])}" title="Término" />
+                                </div>
+                            `;
+                        } else {
+                            displayValue = `<input type="datetime-local" class="custom-date" value="${formatForDateTimeLocal(cellValue)}" />`;
+                        }
+                    } 
+                    else if (cellValue === null || cellValue === undefined) {
+                        displayValue = '-';
+                    }
+
+                    return `<td class="type-${col.type}">${displayValue}</td>`;
+                }).join('');
+
+                return `<tr>${cellsHtml}</tr>`;
+            }).join('');
+        }
+
+        // Visão 2: Quadro (Board/Kanban)
+        function renderBoard(cols, rows) {
+            const boardContainer = document.getElementById('view-board');
+            const groupCol = cols.find(c => c.id === currentGroupColId);
+            let boardColumns = [];
+
+            if (groupCol) {
+                if (groupCol.type === 'select') {
+                    boardColumns = groupCol.options.map(opt => ({
+                        title: opt.value, color: opt.color, items: rows.filter(r => r[groupCol.id] === opt.id)
+                    }));
+                } else if (groupCol.type === 'checkbox') {
+                    boardColumns = [
+                        { title: "✅ Sim", color: "green", items: rows.filter(r => r[groupCol.id] === true) },
+                        { title: "❌ Não", color: "transparent", items: rows.filter(r => r[groupCol.id] !== true) }
+                    ];
+                }
+
+                const emptyItems = rows.filter(r => r[groupCol.id] === null || r[groupCol.id] === undefined || r[groupCol.id] === '');
+                if (emptyItems.length > 0 && groupCol.type !== 'checkbox') {
+                    boardColumns.push({ title: "Sem Grupo", color: "transparent", items: emptyItems });
+                }
+            } else {
+                boardColumns = [{ title: "Sem Grupo", color: "transparent", items: rows }];
+            }
+
+            const metaCols = cols.filter(c => c.id !== 'page_title' && (!groupCol || c.id !== groupCol.id));
+
+            boardContainer.innerHTML = boardColumns.map(bCol => {
+                const cardsHtml = bCol.items.map(row => {
+                    const metaHtml = metaCols.map(mCol => {
+                        const val = row[mCol.id];
+                        if (val === null || val === undefined || val === false || val === '') return '';
+                        
+                        let displayVal = val;
+                        if (mCol.type === 'checkbox') displayVal = '✅ ' + mCol.name;
+                        if (mCol.type === 'date') displayVal = '📅 ' + formatForDisplay(val);
+                        if (mCol.type === 'select') {
+                             const opt = mCol.options.find(o => o.id === val);
+                             displayVal = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--text-${opt?opt.color:'grey'}); margin-right:4px;"></span> ${opt ? opt.value : val}`;
+                        }
+                        
+                        return `<div class="board-meta-item">${displayVal}</div>`;
+                    }).join('');
+
+                    return `
+                        <div class="board-card">
+                            <div class="board-card-title">${row.page_title}</div>
+                            <div class="board-card-meta">${metaHtml}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="board-col">
+                        <div class="board-header">
+                            <span class="board-badge color-${bCol.color}">${bCol.title}</span>
+                            <span class="board-count">${bCol.items.length}</span>
+                        </div>
+                        ${cardsHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Visão 3: Calendário (Linhas Contínuas / Ribbons com CSS Grid dinâmico)
+        function renderCalendar(cols, rows) {
+            const gridBody = document.getElementById('calendar-grid-body');
+            const monthYearLabel = document.getElementById('calendar-month-year');
+            
+            const dateCol = cols.find(c => c.type === 'date');
+
+            if (!dateCol) {
+                monthYearLabel.textContent = "Nenhuma coluna de data encontrada";
+                gridBody.innerHTML = '';
+                return;
+            }
+
+            const year = calendarCurrentDate.getFullYear();
+            const month = calendarCurrentDate.getMonth();
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            
+            monthYearLabel.textContent = `${monthNames[month]} de ${year}`;
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+
+            const groupCol = cols.find(c => c.type === 'select');
+
+            // 1. Criar e organizar as semanas
+            let weeks = [];
+            let currentDay = 1;
+
+            for (let w = 0; w < 6; w++) {
+                if (currentDay > daysInMonth) break;
+                
+                let weekDays = [];
+                for (let d = 0; d < 7; d++) {
+                    if (w === 0 && d < firstDayOfMonth) {
+                        weekDays.push(null);
+                    } else if (currentDay <= daysInMonth) {
+                        weekDays.push(currentDay);
+                        currentDay++;
+                    } else {
+                        weekDays.push(null);
+                    }
+                }
+                weeks.push(weekDays);
+            }
+
+            const metaCols = cols.filter(c => c.id !== 'page_title');
+
+            // 2. Formatar e ordenar todos os eventos
+            let calendarEvents = rows.map(row => {
+                const val = row[dateCol.id];
+                if (!val) return null;
+
+                let startDateStr, endDateStr;
+                if (String(val).includes('@')) {
+                    const parts = String(val).split('@');
+                    startDateStr = parts[0];
+                    endDateStr = parts[1];
+                } else {
+                    startDateStr = val;
+                    endDateStr = val;
+                }
+
+                let start = new Date(startDateStr);
+                let end = new Date(endDateStr);
+                
+                if(isNaN(start.getTime())) return null;
+                if(isNaN(end.getTime())) end = start;
+
+                // Normaliza para comparar perfeitamente por dias inteiros
+                start.setHours(0,0,0,0);
+                end.setHours(0,0,0,0);
+                
+                let color = 'grey';
+                if (groupCol) {
+                    const opt = groupCol.options.find(o => o.id === row[groupCol.id]);
+                    if (opt) color = opt.color;
+                }
+                
+                const metaHtml = metaCols.map(mCol => {
+                    const mVal = row[mCol.id];
+                    if (mVal === null || mVal === undefined || mVal === false || mVal === '') return '';
+                    let displayVal = mVal;
+                    if (mCol.type === 'checkbox') displayVal = '✅ ' + mCol.name;
+                    if (mCol.type === 'date') displayVal = '📅 ' + formatForDisplay(mVal);
+                    if (mCol.type === 'select') {
+                         const opt = mCol.options.find(o => o.id === mVal);
+                         displayVal = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--text-${opt?opt.color:'grey'}); margin-right:4px;"></span> ${opt ? opt.value : mVal}`;
+                    }
+                    return `<div class="board-meta-item">${displayVal}</div>`;
+                }).join('');
+
+                return { row, start, end, title: row.page_title, color, metaHtml };
+            }).filter(e => e !== null);
+
+            // Ordena primeiro os eventos que começam antes, seguidos pelos mais compridos (evita fragmentação na tela)
+            calendarEvents.sort((a, b) => {
+                if (a.start.getTime() !== b.start.getTime()) return a.start.getTime() - b.start.getTime();
+                return (b.end.getTime() - b.start.getTime()) - (a.end.getTime() - a.start.getTime());
+            });
+
+            // 3. Renderiza cada semana com seu CSS Grid isolado
+            let monthHtml = '';
+
+            weeks.forEach(weekDays => {
+                // Datas de Início e Fim físicas da semana atual na tela
+                let wStartNum = weekDays.find(d => d !== null);
+                let realWeekStart = new Date(year, month, wStartNum);
+                realWeekStart.setDate(realWeekStart.getDate() - weekDays.indexOf(wStartNum)); // Volta até o Domingo
+                let realWeekEnd = new Date(realWeekStart);
+                realWeekEnd.setDate(realWeekEnd.getDate() + 6); // Avança até o Sábado
+                
+                // Pega só os eventos que caem de alguma forma nesta semana específica
+                let weekEvents = calendarEvents.filter(e => e.start <= realWeekEnd && e.end >= realWeekStart);
+                
+                // Sistema de Alocação de Slots (Raias Horizontais)
+                let slots = Array.from({length: 7}, () => []);
+                let allocatedEvents = [];
+                
+                weekEvents.forEach(e => {
+                    let startCol = 0;
+                    if (e.start > realWeekStart) startCol = Math.round((e.start.getTime() - realWeekStart.getTime()) / 86400000);
+                    let endCol = 6;
+                    if (e.end < realWeekEnd) endCol = Math.round((e.end.getTime() - realWeekStart.getTime()) / 86400000);
+                    
+                    let slot = 0;
+                    while (true) {
+                        let available = true;
+                        for (let c = startCol; c <= endCol; c++) {
+                            if (slots[c][slot]) { available = false; break; }
+                        }
+                        if (available) break;
+                        slot++;
+                    }
+                    
+                    for (let c = startCol; c <= endCol; c++) slots[c][slot] = true;
+                    
+                    let spanLeft = e.start < realWeekStart;
+                    let spanRight = e.end > realWeekEnd;
+                    
+                    allocatedEvents.push({ e, startCol, endCol, slot, spanLeft, spanRight });
+                });
+                
+                let maxSlots = 0;
+                for(let i=0; i<7; i++) {
+                    if(slots[i].length > maxSlots) maxSlots = slots[i].length;
+                }
+                
+                // A magia da altura fluída (CSS Grid)
+                let rowsDef = `max-content `; // Row 1 = Numeração dos dias
+                for(let i=0; i<maxSlots; i++) rowsDef += `max-content `; // Rows dinâmicos = Ribbons
+                rowsDef += `1fr`; // Row final para expandir o fundo vazio e manter 120px min.
+                
+                let weekHtml = `<div class="calendar-week" style="grid-template-rows: ${rowsDef};">`;
+                
+                // Renderizando os Fundos das colunas
+                for(let i=0; i<7; i++) {
+                    let dayNum = weekDays[i];
+                    let isEmpty = dayNum === null;
+                    let isToday = dayNum === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                    
+                    let bgClass = `calendar-day-bg ${isEmpty ? 'empty' : ''} ${isToday ? 'today' : ''}`;
+                    if (i === 6) bgClass += ' last-col';
+
+                    // O Fundo da coluna se espalha desde a row 1 até a última (-1) daquela semana
+                    weekHtml += `<div class="${bgClass}" style="grid-column: ${i+1}; grid-row: 1 / -1;"></div>`;
+                    
+                    if (!isEmpty) {
+                        weekHtml += `<div class="calendar-day-num ${isToday ? 'today' : ''}" style="grid-column: ${i+1}; grid-row: 1;">${dayNum}</div>`;
+                    }
+                }
+                
+                // Renderizando os Ribbons (Eventos Contínuos) sobrepostos nos fundos
+                allocatedEvents.forEach(alloc => {
+                    let gridCol = alloc.startCol + 1; // +1 porque grid column começa em 1
+                    let span = alloc.endCol - alloc.startCol + 1;
+                    let gridRow = alloc.slot + 2; // +2 porque row 1 é do número do dia
+                    
+                    let classes = `calendar-event color-${alloc.e.color}`;
+                    if (alloc.spanLeft) classes += ` span-left`;
+                    if (alloc.spanRight) classes += ` span-right`;
+                    
+                    weekHtml += `
+                        <div class="${classes}" style="grid-column: ${gridCol} / span ${span}; grid-row: ${gridRow};">
+                            <div class="calendar-event-title">${alloc.e.title}</div>
+                            <div class="calendar-event-meta">${alloc.e.metaHtml}</div>
+                        </div>
+                    `;
+                });
+                
+                weekHtml += `</div>`;
+                monthHtml += weekHtml;
+            });
+
+            gridBody.innerHTML = monthHtml;
+        }
+
+        // --- 5. Listeners de Eventos ---
+        
+        // Troca de Visão (Tabela / Board / Calendário)
+        document.getElementById('view-selector').addEventListener('change', (e) => {
+            currentView = e.target.value;
+            
+            document.getElementById('view-table').classList.toggle('hidden', currentView !== 'table');
+            document.getElementById('view-board').classList.toggle('hidden', currentView !== 'board');
+            document.getElementById('view-calendar').classList.toggle('hidden', currentView !== 'calendar');
+            
+            // O botão Agrupar SÓ aparece na visão Board
+            document.getElementById('groupby-container').classList.toggle('hidden', currentView !== 'board');
+            
+            document.querySelectorAll('.popover-menu').forEach(el => el.classList.remove('active'));
+            
+            applyFiltersAndRender();
+        });
+
+        // Controles de Navegação do Calendário
+        document.getElementById('btn-prev-month').addEventListener('click', () => {
+            calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() - 1);
+            applyFiltersAndRender();
+        });
+
+        document.getElementById('btn-next-month').addEventListener('click', () => {
+            calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() + 1);
+            applyFiltersAndRender();
+        });
+
+        // Controles dos Popovers (Filtros & Agrupar)
+        document.getElementById('btn-toggle-filters').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('groupby-menu').classList.remove('active'); 
+            document.getElementById('filter-menu').classList.toggle('active');
+        });
+
+        document.getElementById('btn-toggle-groupby').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('filter-menu').classList.remove('active'); 
+            document.getElementById('groupby-menu').classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#btn-toggle-filters') && !e.target.closest('#filter-menu')) {
+                document.getElementById('filter-menu').classList.remove('active');
+            }
+            if (!e.target.closest('#btn-toggle-groupby') && !e.target.closest('#groupby-menu')) {
+                document.getElementById('groupby-menu').classList.remove('active');
+            }
+        });
+
+        document.getElementById('groupby-select').addEventListener('change', (e) => {
+            currentGroupColId = e.target.value;
+            updateGroupLabel();
+            document.getElementById('groupby-menu').classList.remove('active');
+            applyFiltersAndRender();
+        });
+
+        // Ações de Filtro
+        document.getElementById('btn-add-rule').addEventListener('click', () => {
+            activeFilters.push({ id: Date.now().toString(), colId: '', operator: 'equals', value: '' });
+            renderFilterMenu();
+            applyFiltersAndRender();
+        });
+
+        document.getElementById('filter-rules-container').addEventListener('input', (e) => {
+            const filterId = e.target.getAttribute('data-filter-id');
+            const filter = activeFilters.find(f => f.id === filterId);
+            if (!filter) return;
+
+            if (e.target.classList.contains('filter-col-select')) {
+                filter.colId = e.target.value;
+                filter.value = ''; 
+                const colType = globalData.cols.find(c => c.id === filter.colId)?.type;
+                if (colType !== 'text' && filter.operator === 'contains') filter.operator = 'equals';
+                renderFilterMenu();
+            } else if (e.target.classList.contains('filter-operator-select')) {
+                filter.operator = e.target.value;
+            } else if (e.target.classList.contains('filter-value-input')) {
+                filter.value = e.target.value;
+            }
+            
+            applyFiltersAndRender();
+        });
+
+        document.getElementById('filter-rules-container').addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-remove-filter')) {
+                const filterId = e.target.getAttribute('data-filter-id');
+                activeFilters = activeFilters.filter(f => f.id !== filterId);
+                renderFilterMenu();
+                applyFiltersAndRender();
+            }
+        });
+
+        // --- 6. Inicialização ---
+        async function init() {
+            try {
+                const response = await fetch("./data.json");
+                const data = await response.json();
+
+                globalData = parseTable(data);
+                
+                initGroupSelector();
+                renderFilterMenu();
+                applyFiltersAndRender();
+            } catch (error) {
+                document.getElementById('table-body').innerHTML = `
+                    <tr><td class="loading" colspan="100%" style="color: #fa5252;">Erro: ${error.message}</td></tr>
+                `;
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
