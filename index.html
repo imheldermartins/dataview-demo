@@ -12,11 +12,15 @@
             --text-grey: rgb(74, 76, 92);
             --text-blue: rgb(27, 56, 134);
             --text-yellow: rgb(114, 112, 21);
+            --text-orange: rgb(114, 58, 21);
+            --text-red: rgb(114, 21, 36);
             --text-green: rgb(27, 139, 55);
 
             --bg-grey: rgba(121, 124, 148, 0.3);
             --bg-blue: rgba(55, 97, 214, 0.3);
             --bg-yellow: rgba(255, 252, 72, 0.5);
+            --bg-orange: rgba(235, 126, 54, 0.5);
+            --bg-red: rgba(230, 42, 73, 0.5);
             --bg-green: rgba(36, 255, 91, 0.3);
 
             --transparent: transparent;
@@ -25,13 +29,19 @@
         /* Estilização Geral */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
-            margin: 0;
-            padding: 40px 20px;
+            background-color: #f7f7f7;
+            color: #272727;
+            margin: 0; padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        main {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 40px;
+            min-height: 85vh;
         }
 
         h1 {
@@ -43,7 +53,7 @@
         /* Container Principal */
         .app-container {
             width: 100%;
-            max-width: 1000px;
+            margin: 0 auto;
             position: relative;
         }
 
@@ -55,7 +65,7 @@
             margin-bottom: 12px;
             position: relative;
         }
-        
+
         .controls-actions {
             display: flex;
             gap: 12px;
@@ -65,7 +75,7 @@
         .btn-ui {
             background-color: #ffffff;
             border: 1px solid #ced4da;
-            padding: 6px 14px;
+            padding: 5px 10px;
             border-radius: 6px;
             font-size: 0.9rem;
             font-weight: 500;
@@ -79,7 +89,7 @@
         .btn-ui:hover {
             background-color: #f7f7f7;
         }
-        
+
         .btn-filters {
             background-color: #ffffff;
             border: 1px solid #ced4da;
@@ -117,8 +127,15 @@
             display: flex;
         }
 
-        #filter-menu { right: 0; min-width: 450px; }
-        #groupby-menu { right: 100px; min-width: 200px; }
+        #filter-menu {
+            right: 0;
+            min-width: 450px;
+        }
+
+        #groupby-menu {
+            right: 100px;
+            min-width: 200px;
+        }
 
         .filter-rule {
             display: flex;
@@ -147,8 +164,10 @@
             font-size: 0.85rem;
             outline: none;
         }
-        
-        .popover-select { width: 100%; }
+
+        .popover-select {
+            width: 100%;
+        }
 
         .filter-rule select:focus,
         .filter-rule input:focus,
@@ -183,14 +202,16 @@
         .btn-add-rule:hover {
             color: #878787;
         }
-        
-        .hidden { display: none !important; }
+
+        .hidden {
+            display: none !important;
+        }
 
         /* Container da Tabela */
         .table-container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            /* background-color: #ff0; */
+            border-radius: 4px;
+            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1); */
             overflow-x: auto;
         }
 
@@ -198,38 +219,41 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         thead {
-            background-color: #f1f3f5;
+            background-color: #eeeeee;
             border-bottom: 2px solid #dee2e6;
         }
 
         th {
             padding: 14px 16px;
             font-weight: 600;
-            color: #495057;
+            color: #676767;
             text-transform: uppercase;
             font-size: 0.75rem;
             letter-spacing: 0.5px;
         }
 
         tbody tr {
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid #d7d7d7;
         }
 
-        tbody tr:last-child {
-            border-bottom: none;
+        td:not(td:first-child),
+        th:not(th:first-child) {
+            border-left: 1px solid #d7d7d7;
         }
+
+        /* tbody tr:last-child { border-bottom: none; } */
 
         tbody tr:hover {
             background-color: #f8f9fa;
         }
 
         td {
-            padding: 14px 16px;
-            color: #495057;
+            padding: 5px 10px;
+            color: #333333;
             vertical-align: middle;
         }
 
@@ -237,8 +261,8 @@
         .custom-select {
             appearance: none;
             border: none;
-            padding: 4px 12px;
-            border-radius: 12px;
+            padding: 5px 10px;
+            border-radius: 6px;
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
@@ -250,11 +274,41 @@
             opacity: 0.8;
         }
 
-        .color-grey { background-color: var(--bg-grey); color: var(--text-grey); }
-        .color-blue { background-color: var(--bg-blue); color: var(--text-blue); }
-        .color-yellow { background-color: var(--bg-yellow); color: var(--text-yellow); }
-        .color-green { background-color: var(--bg-green); color: var(--text-green); }
-        .color-transparent { background-color: var(--transparent); color: inherit; border: 1px dashed #ccc; }
+        .color-red {
+            background-color: var(--bg-red);
+            color: var(--text-red);
+        }
+
+        .color-orange {
+            background-color: var(--bg-orange);
+            color: var(--text-orange);
+        }
+
+        .color-grey {
+            background-color: var(--bg-grey);
+            color: var(--text-grey);
+        }
+
+        .color-blue {
+            background-color: var(--bg-blue);
+            color: var(--text-blue);
+        }
+
+        .color-yellow {
+            background-color: var(--bg-yellow);
+            color: var(--text-yellow);
+        }
+
+        .color-green {
+            background-color: var(--bg-green);
+            color: var(--text-green);
+        }
+
+        .color-transparent {
+            background-color: var(--transparent);
+            color: inherit;
+            border: 1px dashed #ccc;
+        }
 
         .custom-checkbox {
             width: 18px;
@@ -262,7 +316,6 @@
             cursor: pointer;
             accent-color: var(--input-checkbox);
             margin: 0;
-            display: block;
         }
 
         .custom-date {
@@ -319,8 +372,8 @@
 
         .board-badge {
             padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            border-radius: 4px;
+            font-size: .75rem;
             font-weight: 600;
         }
 
@@ -371,17 +424,17 @@
             width: 100%;
             background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
-        
+
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
         }
-        
+
         /* Grid Header (Dias da Semana) */
         .calendar-grid-header {
             display: grid;
@@ -393,7 +446,7 @@
             border-top-right-radius: 6px;
             overflow: hidden;
         }
-        
+
         .calendar-day-name {
             text-align: center;
             font-weight: 600;
@@ -404,10 +457,11 @@
             border-right: 1px solid #dee2e6;
             background-color: #f8f9fa;
         }
+
         .calendar-day-name:last-child {
             border-right: none;
         }
-        
+
         /* O Corpo que empilha as semanas */
         #calendar-grid-body {
             border-right: 1px solid #dee2e6;
@@ -430,18 +484,22 @@
         .calendar-day-bg {
             border-right: 1px solid #dee2e6;
             background-color: #ffffff;
-            z-index: 1; /* Atrás dos ribbons */
+            z-index: 1;
+            /* Atrás dos ribbons */
         }
+
         .calendar-day-bg.last-col {
             border-right: none;
         }
+
         .calendar-day-bg.empty {
             background-color: #fcfcfc;
         }
+
         .calendar-day-bg.today {
             background-color: #f0f7ff;
         }
-        
+
         .calendar-day-num {
             font-size: 0.8rem;
             font-weight: 600;
@@ -450,23 +508,25 @@
             padding: 8px 8px 2px 8px;
             z-index: 2;
         }
+
         .calendar-day-num.today {
             color: #58a6ff;
             font-weight: 700;
         }
-        
+
         /* Eventos no CSS Grid (As Linhas Contínuas / Ribbons) */
         .calendar-event {
-            margin: 2px 6px; /* Espaço para não tocar as extremidades */
+            margin: 2px 6px;
+            /* Espaço para não tocar as extremidades */
             padding: 6px 10px;
             border-radius: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             z-index: 5;
             display: flex;
             flex-direction: column;
             gap: 6px;
             overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             text-decoration: none;
         }
 
@@ -481,7 +541,8 @@
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
             border-left: none;
-            padding-left: 16px; /* Compensa a margem perdida */
+            padding-left: 16px;
+            /* Compensa a margem perdida */
         }
 
         .calendar-event.span-right {
@@ -510,96 +571,135 @@
 
 <body>
 
-    <h1>Componente <code>&lt;DataView/&gt;</code></h1>
+    <main>
+        <h1>Visualização do Datahub baseado no <u>JIRA</u> com <strong style="color: #7b1aeb;">Cub's</strong></h1>
 
-    <div class="app-container">
+        <div class="app-container">
 
-        <div class="controls-header">
-            <div class="controls-views">
-                <select class="btn-ui view-selector" id="view-selector">
-                    <option value="table">📋 Tabela</option>
-                    <option value="board">📊 Quadro</option>
-                    <option value="calendar">📅 Calendário</option>
-                </select>
-            </div>
+            <div class="controls-header">
+                <div class="controls-views">
+                    <select class="btn-ui view-selector" id="view-selector">
+                        <option value="table">Tabela</option>
+                        <option value="board">Quadro</option>
+                        <option value="calendar">Calendário</option>
+                    </select>
+                </div>
 
-            <div class="controls-actions">
-                <!-- Mostrado apenas no Board -->
-                <div id="groupby-container" class="hidden">
-                    <button class="btn-ui" id="btn-toggle-groupby">
-                        Agrupar: <span id="current-group-label" style="font-weight: bold; margin-left: 4px;"></span>
+                <div class="controls-actions">
+                    <!-- Mostrado apenas no Board -->
+                    <div id="groupby-container" class="hidden">
+                        <button class="btn-ui" id="btn-toggle-groupby">
+                            Agrupar: <span id="current-group-label" style="font-weight: bold; margin-left: 4px;"></span>
+                        </button>
+                    </div>
+
+                    <button class="btn-filters" id="btn-toggle-filters">
+                        <span id="filter-count"></span> Filtros
                     </button>
                 </div>
 
-                <button class="btn-filters" id="btn-toggle-filters">
-                    <span id="filter-count"></span> Filtros
-                </button>
+                <!-- Popovers -->
+                <div class="popover-menu filter-menu" id="filter-menu">
+                    <div id="filter-rules-container"></div>
+                    <button class="btn-add-rule" id="btn-add-rule">+ Adicionar filtro</button>
+                </div>
+
+                <div class="popover-menu filter-menu" id="groupby-menu">
+                    <div style="font-size: 0.8rem; color: #969696; margin-bottom: 4px;">Agrupar cartões por:</div>
+                    <select id="groupby-select" class="popover-select">
+                        <!-- Preenchido via JS -->
+                    </select>
+                </div>
             </div>
 
-            <!-- Popovers -->
-            <div class="popover-menu filter-menu" id="filter-menu">
-                <div id="filter-rules-container"></div>
-                <button class="btn-add-rule" id="btn-add-rule">+ Adicionar filtro</button>
+            <!-- Visão 1: Tabela -->
+            <div class="table-container" id="view-table">
+                <table id="dynamic-table">
+                    <thead>
+                        <tr id="table-headers"></tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr>
+                            <td class="loading" colspan="100%">Carregando dados da tabela...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <div class="popover-menu filter-menu" id="groupby-menu">
-                <div style="font-size: 0.8rem; color: #969696; margin-bottom: 4px;">Agrupar cartões por:</div>
-                <select id="groupby-select" class="popover-select">
-                    <!-- Preenchido via JS -->
-                </select>
+            <!-- Visão 2: Quadro (Board/Kanban) -->
+            <div class="board-container hidden" id="view-board">
+                <!-- Colunas criadas dinamicamente -->
             </div>
+
+            <!-- Visão 3: Calendário -->
+            <div class="calendar-container hidden" id="view-calendar">
+                <div class="calendar-header">
+                    <button class="btn-ui" id="btn-prev-month">&lt;</button>
+                    <h2 id="calendar-month-year" style="margin:0; font-size:1.2rem; color:#343a40;"></h2>
+                    <button class="btn-ui" id="btn-next-month">&gt;</button>
+                </div>
+
+                <div class="calendar-grid-header">
+                    <div class="calendar-day-name">Dom</div>
+                    <div class="calendar-day-name">Seg</div>
+                    <div class="calendar-day-name">Ter</div>
+                    <div class="calendar-day-name">Qua</div>
+                    <div class="calendar-day-name">Qui</div>
+                    <div class="calendar-day-name">Sex</div>
+                    <div class="calendar-day-name">Sáb</div>
+                </div>
+
+                <div id="calendar-grid-body">
+                    <!-- Semanas renderizadas via JS -->
+                </div>
+            </div>
+
         </div>
+    </main>
 
-        <!-- Visão 1: Tabela -->
-        <div class="table-container" id="view-table">
-            <table id="dynamic-table">
-                <thead>
-                    <tr id="table-headers"></tr>
-                </thead>
-                <tbody id="table-body">
-                    <tr>
-                        <td class="loading" colspan="100%">Carregando dados da tabela...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Visão 2: Quadro (Board/Kanban) -->
-        <div class="board-container hidden" id="view-board">
-            <!-- Colunas criadas dinamicamente -->
-        </div>
-
-        <!-- Visão 3: Calendário -->
-        <div class="calendar-container hidden" id="view-calendar">
-            <div class="calendar-header">
-                <button class="btn-ui" id="btn-prev-month">&lt;</button>
-                <h2 id="calendar-month-year" style="margin:0; font-size:1.2rem; color:#343a40;"></h2>
-                <button class="btn-ui" id="btn-next-month">&gt;</button>
-            </div>
-            
-            <div class="calendar-grid-header">
-                <div class="calendar-day-name">Dom</div>
-                <div class="calendar-day-name">Seg</div>
-                <div class="calendar-day-name">Ter</div>
-                <div class="calendar-day-name">Qua</div>
-                <div class="calendar-day-name">Qui</div>
-                <div class="calendar-day-name">Sex</div>
-                <div class="calendar-day-name">Sáb</div>
-            </div>
-            
-            <div id="calendar-grid-body">
-                <!-- Semanas renderizadas via JS -->
-            </div>
-        </div>
-
-    </div>
+    <ul>
+        <li>
+            Para visualizar a base de dados de inspiração do JIRA: <a href="data.json">data.json</a>
+        </li>
+        <li>
+            Código de seleção SQL que renderiza a prévia (o agrupamento é por front-end ou por query na API
+            `?pretty=table/board/calendar)
+            <pre>
+                <code>
+                    SELECT
+                        p.id AS page_id,
+                        p.title AS page_title,
+                        json_group_object(
+                            pc.id,
+                            json_object(
+                            'row_id', pcv.id, 
+                            'row_data', pcv.data,
+                            'column_name', pc.name,
+                            'column_type', pc.type,
+                            'column_data', pc.data
+                            )
+                        ) AS page_columns
+                    FROM
+                        pages p
+                        INNER JOIN page_hubs ph ON ph.page_id = p.id
+                        LEFT JOIN page_columns_values pcv ON p.id = pcv.page_id
+                        LEFT JOIN page_columns pc ON pcv.page_column_id = pc.id
+                    WHERE
+                        ph.page_root_id = '01KPR8D7QQCDCATHD10E449RX1'
+                    GROUP BY
+                        p.id,
+                        p.title;
+                </code>
+            </pre>
+        </li>
+    </ul>
 
     <script type="module">
         let globalData = { cols: [], rows: [] };
         let activeFilters = [];
         let currentView = 'table';
-        let currentGroupColId = null; 
-        
+        let currentGroupColId = null;
+
         // Estado do Calendário
         let calendarCurrentDate = new Date();
 
@@ -624,7 +724,7 @@
                                 try {
                                     const colDataParsed = typeof colDef.column_data === 'string' ? JSON.parse(colDef.column_data) : colDef.column_data;
                                     options = colDataParsed.options || [];
-                                } catch(e) {}
+                                } catch (e) { }
                             }
                             colsMap.set(colId, { id: colId, name: colDef.column_name, type: colDef.column_type, options: options });
                         }
@@ -651,20 +751,20 @@
             const dStr = isoString.split('@')[0];
             const d = new Date(dStr);
             if (isNaN(d.getTime())) return '';
-            const offset = d.getTimezoneOffset() * 60000; 
+            const offset = d.getTimezoneOffset() * 60000;
             return (new Date(d - offset)).toISOString().slice(0, 16);
         }
 
         function formatForDisplay(isoString) {
             if (!isoString) return '';
             const parts = isoString.split('@');
-            
+
             if (parts.length === 2) {
                 const d1 = new Date(parts[0]).toLocaleDateString('pt-BR');
                 const d2 = new Date(parts[1]).toLocaleDateString('pt-BR');
                 return `${d1} - ${d2}`;
             }
-            
+
             const d = new Date(isoString);
             return d.toLocaleDateString('pt-BR');
         }
@@ -673,8 +773,8 @@
         function initGroupSelector() {
             const selectElement = document.getElementById('groupby-select');
             const groupableCols = globalData.cols.filter(c => c.type === 'select' || c.type === 'checkbox');
-            
-            selectElement.innerHTML = groupableCols.map(col => 
+
+            selectElement.innerHTML = groupableCols.map(col =>
                 `<option value="${col.id}">${col.name}</option>`
             ).join('');
 
@@ -716,14 +816,14 @@
             if (col.type === 'numeric') {
                 return `<input type="number" class="filter-value-input" data-filter-id="${filterId}" value="${val}" placeholder="Número..." />`;
             }
-            
+
             return `<input type="text" class="filter-value-input" data-filter-id="${filterId}" value="${val}" placeholder="Texto..." />`;
         }
 
         function renderFilterMenu() {
             const container = document.getElementById('filter-rules-container');
             const countSpan = document.getElementById('filter-count');
-            
+
             countSpan.textContent = activeFilters.length > 0 ? `(${activeFilters.length})` : '';
 
             if (activeFilters.length === 0) {
@@ -746,9 +846,9 @@
                         
                         <select class="filter-col-select" data-filter-id="${filter.id}" style="width:130px;">
                             <option value="" disabled ${!filter.colId ? 'selected' : ''}>Coluna...</option>
-                            ${globalData.cols.filter(c => c.type !== 'date').map(col => 
-                                `<option value="${col.id}" ${filter.colId === col.id ? 'selected' : ''}>${col.name}</option>`
-                            ).join('')}
+                            ${globalData.cols.filter(c => c.type !== 'date').map(col =>
+                    `<option value="${col.id}" ${filter.colId === col.id ? 'selected' : ''}>${col.name}</option>`
+                ).join('')}
                         </select>
 
                         <select class="filter-operator-select" data-filter-id="${filter.id}" style="width:100px;">
@@ -815,7 +915,7 @@
                     if (col.type === 'select') {
                         const selectedOption = col.options.find(opt => opt.id === cellValue);
                         const bgColorClass = selectedOption ? `color-${selectedOption.color}` : 'color-transparent';
-                        const optionsHtml = col.options.map(opt => 
+                        const optionsHtml = col.options.map(opt =>
                             `<option value="${opt.id}" data-color="${opt.color}" ${opt.id === cellValue ? 'selected' : ''}>${opt.value}</option>`
                         ).join('');
 
@@ -825,10 +925,14 @@
                                 ${optionsHtml}
                             </select>
                         `;
-                    } 
+                    }
                     else if (col.type === 'checkbox') {
-                        displayValue = `<input type="checkbox" class="custom-checkbox" ${cellValue === true ? 'checked' : ''} />`;
-                    } 
+                        displayValue = `
+                            <div style="display:flex;align-items:center;justify-content:center;">
+                                <input type="checkbox" class="custom-checkbox" ${cellValue === true ? 'checked' : ''} />
+                            </div>
+                        `;
+                    }
                     else if (col.type === 'date') {
                         if (cellValue && String(cellValue).includes('@')) {
                             const parts = cellValue.split('@');
@@ -841,7 +945,7 @@
                         } else {
                             displayValue = `<input type="datetime-local" class="custom-date" value="${formatForDateTimeLocal(cellValue)}" />`;
                         }
-                    } 
+                    }
                     else if (cellValue === null || cellValue === undefined) {
                         displayValue = '-';
                     }
@@ -886,15 +990,15 @@
                     const metaHtml = metaCols.map(mCol => {
                         const val = row[mCol.id];
                         if (val === null || val === undefined || val === false || val === '') return '';
-                        
+
                         let displayVal = val;
                         if (mCol.type === 'checkbox') displayVal = '✅ ' + mCol.name;
                         if (mCol.type === 'date') displayVal = '📅 ' + formatForDisplay(val);
                         if (mCol.type === 'select') {
-                             const opt = mCol.options.find(o => o.id === val);
-                             displayVal = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--text-${opt?opt.color:'grey'}); margin-right:4px;"></span> ${opt ? opt.value : val}`;
+                            const opt = mCol.options.find(o => o.id === val);
+                            displayVal = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--text-${opt ? opt.color : 'grey'}); margin-right:4px;"></span> ${opt ? opt.value : val}`;
                         }
-                        
+
                         return `<div class="board-meta-item">${displayVal}</div>`;
                     }).join('');
 
@@ -922,7 +1026,7 @@
         function renderCalendar(cols, rows) {
             const gridBody = document.getElementById('calendar-grid-body');
             const monthYearLabel = document.getElementById('calendar-month-year');
-            
+
             const dateCol = cols.find(c => c.type === 'date');
 
             if (!dateCol) {
@@ -934,7 +1038,7 @@
             const year = calendarCurrentDate.getFullYear();
             const month = calendarCurrentDate.getMonth();
             const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-            
+
             monthYearLabel.textContent = `${monthNames[month]} de ${year}`;
 
             const firstDayOfMonth = new Date(year, month, 1).getDay();
@@ -949,7 +1053,7 @@
 
             for (let w = 0; w < 6; w++) {
                 if (currentDay > daysInMonth) break;
-                
+
                 let weekDays = [];
                 for (let d = 0; d < 7; d++) {
                     if (w === 0 && d < firstDayOfMonth) {
@@ -983,20 +1087,20 @@
 
                 let start = new Date(startDateStr);
                 let end = new Date(endDateStr);
-                
-                if(isNaN(start.getTime())) return null;
-                if(isNaN(end.getTime())) end = start;
+
+                if (isNaN(start.getTime())) return null;
+                if (isNaN(end.getTime())) end = start;
 
                 // Normaliza para comparar perfeitamente por dias inteiros
-                start.setHours(0,0,0,0);
-                end.setHours(0,0,0,0);
-                
+                start.setHours(0, 0, 0, 0);
+                end.setHours(0, 0, 0, 0);
+
                 let color = 'grey';
                 if (groupCol) {
                     const opt = groupCol.options.find(o => o.id === row[groupCol.id]);
                     if (opt) color = opt.color;
                 }
-                
+
                 const metaHtml = metaCols.map(mCol => {
                     const mVal = row[mCol.id];
                     if (mVal === null || mVal === undefined || mVal === false || mVal === '') return '';
@@ -1004,8 +1108,8 @@
                     if (mCol.type === 'checkbox') displayVal = '✅ ' + mCol.name;
                     if (mCol.type === 'date') displayVal = '📅 ' + formatForDisplay(mVal);
                     if (mCol.type === 'select') {
-                         const opt = mCol.options.find(o => o.id === mVal);
-                         displayVal = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--text-${opt?opt.color:'grey'}); margin-right:4px;"></span> ${opt ? opt.value : mVal}`;
+                        const opt = mCol.options.find(o => o.id === mVal);
+                        displayVal = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--text-${opt ? opt.color : 'grey'}); margin-right:4px;"></span> ${opt ? opt.value : mVal}`;
                     }
                     return `<div class="board-meta-item">${displayVal}</div>`;
                 }).join('');
@@ -1029,20 +1133,20 @@
                 realWeekStart.setDate(realWeekStart.getDate() - weekDays.indexOf(wStartNum)); // Volta até o Domingo
                 let realWeekEnd = new Date(realWeekStart);
                 realWeekEnd.setDate(realWeekEnd.getDate() + 6); // Avança até o Sábado
-                
+
                 // Pega só os eventos que caem de alguma forma nesta semana específica
                 let weekEvents = calendarEvents.filter(e => e.start <= realWeekEnd && e.end >= realWeekStart);
-                
+
                 // Sistema de Alocação de Slots (Raias Horizontais)
-                let slots = Array.from({length: 7}, () => []);
+                let slots = Array.from({ length: 7 }, () => []);
                 let allocatedEvents = [];
-                
+
                 weekEvents.forEach(e => {
                     let startCol = 0;
                     if (e.start > realWeekStart) startCol = Math.round((e.start.getTime() - realWeekStart.getTime()) / 86400000);
                     let endCol = 6;
                     if (e.end < realWeekEnd) endCol = Math.round((e.end.getTime() - realWeekStart.getTime()) / 86400000);
-                    
+
                     let slot = 0;
                     while (true) {
                         let available = true;
@@ -1052,54 +1156,54 @@
                         if (available) break;
                         slot++;
                     }
-                    
+
                     for (let c = startCol; c <= endCol; c++) slots[c][slot] = true;
-                    
+
                     let spanLeft = e.start < realWeekStart;
                     let spanRight = e.end > realWeekEnd;
-                    
+
                     allocatedEvents.push({ e, startCol, endCol, slot, spanLeft, spanRight });
                 });
-                
+
                 let maxSlots = 0;
-                for(let i=0; i<7; i++) {
-                    if(slots[i].length > maxSlots) maxSlots = slots[i].length;
+                for (let i = 0; i < 7; i++) {
+                    if (slots[i].length > maxSlots) maxSlots = slots[i].length;
                 }
-                
+
                 // A magia da altura fluída (CSS Grid)
                 let rowsDef = `max-content `; // Row 1 = Numeração dos dias
-                for(let i=0; i<maxSlots; i++) rowsDef += `max-content `; // Rows dinâmicos = Ribbons
+                for (let i = 0; i < maxSlots; i++) rowsDef += `max-content `; // Rows dinâmicos = Ribbons
                 rowsDef += `1fr`; // Row final para expandir o fundo vazio e manter 120px min.
-                
+
                 let weekHtml = `<div class="calendar-week" style="grid-template-rows: ${rowsDef};">`;
-                
+
                 // Renderizando os Fundos das colunas
-                for(let i=0; i<7; i++) {
+                for (let i = 0; i < 7; i++) {
                     let dayNum = weekDays[i];
                     let isEmpty = dayNum === null;
                     let isToday = dayNum === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-                    
+
                     let bgClass = `calendar-day-bg ${isEmpty ? 'empty' : ''} ${isToday ? 'today' : ''}`;
                     if (i === 6) bgClass += ' last-col';
 
                     // O Fundo da coluna se espalha desde a row 1 até a última (-1) daquela semana
-                    weekHtml += `<div class="${bgClass}" style="grid-column: ${i+1}; grid-row: 1 / -1;"></div>`;
-                    
+                    weekHtml += `<div class="${bgClass}" style="grid-column: ${i + 1}; grid-row: 1 / -1;"></div>`;
+
                     if (!isEmpty) {
-                        weekHtml += `<div class="calendar-day-num ${isToday ? 'today' : ''}" style="grid-column: ${i+1}; grid-row: 1;">${dayNum}</div>`;
+                        weekHtml += `<div class="calendar-day-num ${isToday ? 'today' : ''}" style="grid-column: ${i + 1}; grid-row: 1;">${dayNum}</div>`;
                     }
                 }
-                
+
                 // Renderizando os Ribbons (Eventos Contínuos) sobrepostos nos fundos
                 allocatedEvents.forEach(alloc => {
                     let gridCol = alloc.startCol + 1; // +1 porque grid column começa em 1
                     let span = alloc.endCol - alloc.startCol + 1;
                     let gridRow = alloc.slot + 2; // +2 porque row 1 é do número do dia
-                    
+
                     let classes = `calendar-event color-${alloc.e.color}`;
                     if (alloc.spanLeft) classes += ` span-left`;
                     if (alloc.spanRight) classes += ` span-right`;
-                    
+
                     weekHtml += `
                         <div class="${classes}" style="grid-column: ${gridCol} / span ${span}; grid-row: ${gridRow};">
                             <div class="calendar-event-title">${alloc.e.title}</div>
@@ -1107,7 +1211,7 @@
                         </div>
                     `;
                 });
-                
+
                 weekHtml += `</div>`;
                 monthHtml += weekHtml;
             });
@@ -1116,20 +1220,20 @@
         }
 
         // --- 5. Listeners de Eventos ---
-        
+
         // Troca de Visão (Tabela / Board / Calendário)
         document.getElementById('view-selector').addEventListener('change', (e) => {
             currentView = e.target.value;
-            
+
             document.getElementById('view-table').classList.toggle('hidden', currentView !== 'table');
             document.getElementById('view-board').classList.toggle('hidden', currentView !== 'board');
             document.getElementById('view-calendar').classList.toggle('hidden', currentView !== 'calendar');
-            
+
             // O botão Agrupar SÓ aparece na visão Board
             document.getElementById('groupby-container').classList.toggle('hidden', currentView !== 'board');
-            
+
             document.querySelectorAll('.popover-menu').forEach(el => el.classList.remove('active'));
-            
+
             applyFiltersAndRender();
         });
 
@@ -1147,13 +1251,13 @@
         // Controles dos Popovers (Filtros & Agrupar)
         document.getElementById('btn-toggle-filters').addEventListener('click', (e) => {
             e.stopPropagation();
-            document.getElementById('groupby-menu').classList.remove('active'); 
+            document.getElementById('groupby-menu').classList.remove('active');
             document.getElementById('filter-menu').classList.toggle('active');
         });
 
         document.getElementById('btn-toggle-groupby').addEventListener('click', (e) => {
             e.stopPropagation();
-            document.getElementById('filter-menu').classList.remove('active'); 
+            document.getElementById('filter-menu').classList.remove('active');
             document.getElementById('groupby-menu').classList.toggle('active');
         });
 
@@ -1187,7 +1291,7 @@
 
             if (e.target.classList.contains('filter-col-select')) {
                 filter.colId = e.target.value;
-                filter.value = ''; 
+                filter.value = '';
                 const colType = globalData.cols.find(c => c.id === filter.colId)?.type;
                 if (colType !== 'text' && filter.operator === 'contains') filter.operator = 'equals';
                 renderFilterMenu();
@@ -1196,7 +1300,7 @@
             } else if (e.target.classList.contains('filter-value-input')) {
                 filter.value = e.target.value;
             }
-            
+
             applyFiltersAndRender();
         });
 
@@ -1216,7 +1320,7 @@
                 const data = await response.json();
 
                 globalData = parseTable(data);
-                
+
                 initGroupSelector();
                 renderFilterMenu();
                 applyFiltersAndRender();
@@ -1230,4 +1334,5 @@
         init();
     </script>
 </body>
+
 </html>
