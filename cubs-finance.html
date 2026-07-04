@@ -7,10 +7,9 @@
 <title>Gastos do Mês</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* slate scale — começando 950 e diminuindo */
     --slate-950: #020617;
     --slate-900: #0f172a;
     --slate-800: #1e293b;
@@ -18,20 +17,17 @@
     --slate-500: #64748b;
     --slate-400: #94a3b8;
     --slate-300: #cbd5e1;
-    /* indigo (tailwind) */
     --indigo-500: #6366f1;
     --indigo-400: #818cf8;
     --indigo-300: #a5b4fc;
     --red-500: #ef4444;
+    --red-400: #f87171;
     --green-400: #4ade80;
+    --green-500: #22c55e;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-  html, body {
-    height: 100%;
-    overscroll-behavior: none;
-  }
+  html, body { height: 100%; overscroll-behavior: none; }
 
   body {
     font-family: 'Noto Sans', sans-serif;
@@ -47,7 +43,47 @@
     touch-action: manipulation;
   }
 
-  /* ===================== TELA PRINCIPAL ===================== */
+  /* ===================== TOPO / HEADLINE ===================== */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: calc(16px + env(safe-area-inset-top)) 20px 0;
+    z-index: 40;
+  }
+  .btn-restart {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--slate-700);
+    background: rgba(30, 41, 59, .7);
+    color: var(--slate-400);
+    display: grid; place-items: center;
+    backdrop-filter: blur(6px);
+  }
+  .btn-restart:active { color: var(--red-500); border-color: var(--red-500); }
+
+  .headline {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+  .headline .hl-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--slate-500);
+  }
+  .headline .hl-total {
+    font-size: 34px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 4px;
+    letter-spacing: -0.02em;
+  }
+  .headline .hl-total.pos { color: var(--green-400); }
+  .headline .hl-total.neg { color: var(--red-400); }
+
   .month-label {
     font-size: 12px;
     font-weight: 500;
@@ -57,15 +93,14 @@
     margin-bottom: 20px;
   }
 
+  /* ===================== GRID ===================== */
   .grid-points {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
   }
-
   .grid-cell {
-    width: 30px;
-    height: 30px;
+    width: 30px; height: 30px;
     border-radius: 6px;
     background: var(--slate-800);
     border: 1px solid rgba(51, 65, 85, .5);
@@ -75,8 +110,7 @@
   .grid-cell:active { transform: scale(.9); }
   .grid-cell.today { box-shadow: 0 0 0 1.5px var(--indigo-400); }
   .grid-cell .fill {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     border-radius: 5px;
     background: var(--indigo-500);
     opacity: 0;
@@ -89,7 +123,6 @@
     height: 16px;
     text-align: center;
   }
-
   .insights {
     margin-top: 10px;
     max-width: 290px;
@@ -104,9 +137,7 @@
   /* ===================== FAB + SLIDE MENU ===================== */
   .fab-zone {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -114,7 +145,6 @@
     pointer-events: none;
     z-index: 50;
   }
-
   .slide-menu {
     display: flex;
     gap: 10px;
@@ -124,10 +154,7 @@
     transition: opacity .18s ease, transform .18s ease;
     pointer-events: none;
   }
-  .slide-menu.open {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  .slide-menu.open { opacity: 1; transform: translateY(0) scale(1); }
 
   .slide-opt {
     width: 66px;
@@ -142,33 +169,18 @@
     backdrop-filter: blur(8px);
     transition: transform .1s ease, background .1s ease, border-color .1s ease;
   }
-  .slide-opt .ic {
-    width: 26px; height: 26px;
-    display: grid; place-items: center;
-    color: var(--slate-400);
-  }
-  .slide-opt .lb {
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--slate-400);
-    letter-spacing: .02em;
-  }
-  .slide-opt.hot {
-    background: var(--indigo-500);
-    border-color: var(--indigo-400);
-    transform: translateY(-8px) scale(1.08);
-  }
+  .slide-opt .ic { width: 26px; height: 26px; display: grid; place-items: center; color: var(--slate-400); }
+  .slide-opt .lb { font-size: 10px; font-weight: 500; color: var(--slate-400); letter-spacing: .02em; }
+  .slide-opt.hot { background: var(--indigo-500); border-color: var(--indigo-400); transform: translateY(-8px) scale(1.08); }
   .slide-opt.hot .ic, .slide-opt.hot .lb { color: #fff; }
 
   .fab {
-    width: 60px;
-    height: 60px;
+    width: 60px; height: 60px;
     border-radius: 50%;
     border: none;
     background: var(--indigo-500);
     color: #fff;
-    display: grid;
-    place-items: center;
+    display: grid; place-items: center;
     box-shadow: 0 8px 24px rgba(99, 102, 241, .45);
     pointer-events: auto;
     touch-action: none;
@@ -176,7 +188,7 @@
   .fab:active { background: var(--indigo-400); }
   .fab svg { width: 26px; height: 26px; }
 
-  /* ===================== PÁGINAS FULL (Operação / Carteira) ===================== */
+  /* ===================== PÁGINAS ===================== */
   .page {
     position: fixed;
     inset: 0;
@@ -229,7 +241,8 @@
     margin-bottom: 8px;
   }
   .field input[type=text],
-  .field input[type=tel] {
+  .field input[type=tel],
+  .field select {
     width: 100%;
     background: var(--slate-800);
     border: 1px solid var(--slate-700);
@@ -239,10 +252,28 @@
     font-size: 16px;
     color: #fff;
     outline: none;
+    appearance: none;
+    -webkit-appearance: none;
   }
-  .field input:focus { border-color: var(--indigo-500); }
+  .field input:focus, .field select:focus { border-color: var(--indigo-500); }
 
-  /* segment receita/despesa */
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '';
+    position: absolute;
+    right: 16px; top: 50%;
+    width: 8px; height: 8px;
+    border-right: 2px solid var(--slate-500);
+    border-bottom: 2px solid var(--slate-500);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  /* input de valor com mask BRL — cor por tipo da operação */
+  input.amount { font-weight: 700; letter-spacing: .01em; }
+  input.amount.receita { color: var(--green-400); border-color: rgba(74, 222, 128, .45); }
+  input.amount.despesa { color: var(--red-400); border-color: rgba(248, 113, 113, .45); }
+
   .segment {
     display: flex;
     background: var(--slate-800);
@@ -262,35 +293,9 @@
     padding: 11px 0;
     border-radius: 9px;
   }
-  .segment button.on { background: var(--indigo-500); color: #fff; }
+  .segment button.on-receita { background: rgba(34, 197, 94, .2); color: var(--green-400); }
+  .segment button.on-despesa { background: rgba(239, 68, 68, .2); color: var(--red-400); }
 
-  /* scroll list de #tags */
-  .tag-scroll {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 10px 2px 4px;
-    scrollbar-width: none;
-  }
-  .tag-scroll::-webkit-scrollbar { display: none; }
-  .tag-chip {
-    flex-shrink: 0;
-    border: 1px solid var(--slate-700);
-    background: var(--slate-800);
-    color: var(--indigo-300);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 14px;
-    border-radius: 999px;
-  }
-  .tag-chip:active, .tag-chip.sel {
-    background: var(--indigo-500);
-    border-color: var(--indigo-400);
-    color: #fff;
-  }
-
-  /* select de carteira */
   .wallet-scroll { display: flex; flex-wrap: wrap; gap: 8px; }
   .wallet-pick {
     border: 1px solid var(--slate-700);
@@ -321,35 +326,67 @@
     box-shadow: 0 8px 24px rgba(99, 102, 241, .35);
   }
   .btn-save:active { background: var(--indigo-400); }
-  .btn-save:disabled { opacity: .4; box-shadow: none; }
 
-  /* carteira lista */
-  .wallet-item {
+  /* ===================== CARDS DE TOTAIS (CARTEIRA) ===================== */
+  .totals-row { display: flex; gap: 12px; margin-top: 20px; }
+  .total-card {
+    flex: 1;
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid var(--slate-700);
+    background: var(--slate-800);
+  }
+  .total-card .tc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 6px;
+  }
+  .total-card .tc-value { font-size: 19px; font-weight: 800; margin-top: 6px; color: #fff; letter-spacing: -0.01em; }
+  .total-card.receitas { border-color: rgba(34, 197, 94, .35); background: rgba(34, 197, 94, .07); }
+  .total-card.receitas .tc-label { color: var(--green-400); }
+  .total-card.despesas { border-color: rgba(239, 68, 68, .35); background: rgba(239, 68, 68, .07); }
+  .total-card.despesas .tc-label { color: var(--red-400); }
+
+  /* listas (operações e fontes) */
+  .row-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     background: var(--slate-800);
     border: 1px solid var(--slate-700);
     border-radius: 14px;
-    padding: 14px 16px;
+    padding: 13px 14px;
     margin-top: 12px;
   }
-  .wallet-item .w-ic {
-    width: 38px; height: 38px;
+  .row-item .r-ic {
+    width: 36px; height: 36px;
     border-radius: 10px;
-    background: rgba(99, 102, 241, .15);
-    color: var(--indigo-400);
     display: grid; place-items: center;
     flex-shrink: 0;
   }
-  .wallet-item .w-tt { font-size: 15px; font-weight: 600; color: #fff; }
-  .wallet-item .w-am { font-size: 13px; color: var(--slate-400); margin-top: 2px; }
-  .wallet-empty {
-    margin-top: 26px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--slate-500);
+  .row-item .r-ic.receita { background: rgba(34, 197, 94, .15); color: var(--green-400); }
+  .row-item .r-ic.despesa { background: rgba(239, 68, 68, .15); color: var(--red-400); }
+  .row-item .r-ic.wallet  { background: rgba(99, 102, 241, .15); color: var(--indigo-400); }
+  .row-item .r-body { flex: 1; min-width: 0; }
+  .row-item .r-tt { font-size: 15px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row-item .r-sub { font-size: 12px; color: var(--slate-400); margin-top: 2px; }
+  .row-item .r-act {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    border: 1px solid var(--slate-700);
+    background: transparent;
+    color: var(--slate-400);
+    display: grid; place-items: center;
+    flex-shrink: 0;
   }
+  .row-item .r-act:active { border-color: var(--indigo-500); color: var(--indigo-400); }
+  .row-item .r-act.del:active { border-color: var(--red-500); color: var(--red-500); }
+
+  .list-empty { margin-top: 24px; text-align: center; font-size: 13px; color: var(--slate-500); }
   .divider {
     margin: 30px 0 4px;
     font-size: 11px;
@@ -359,7 +396,6 @@
     color: var(--slate-500);
   }
 
-  /* toast */
   .toast {
     position: fixed;
     left: 50%;
@@ -385,7 +421,18 @@
 </head>
 <body>
 
+  <!-- ============ TOPO ============ -->
+  <div class="topbar">
+    <button class="btn-restart" id="btnRestart" aria-label="Resetar sistema">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+    </button>
+  </div>
+
   <!-- ============ TELA PRINCIPAL ============ -->
+  <div class="headline">
+    <div class="hl-label">Você possui</div>
+    <div class="hl-total" id="hlTotal">R$ 0,00</div>
+  </div>
   <div class="month-label" id="monthLabel"></div>
   <div class="grid-points" id="gridPoints"></div>
   <div class="cell-info" id="cellInfo"></div>
@@ -416,15 +463,53 @@
     </button>
   </div>
 
-  <!-- ============ PÁGINA OPERAÇÃO ============ -->
-  <div class="page" id="pageOp">
+  <!-- ============ PÁGINA TRANSAÇÃO ============ -->
+  <div class="page" id="pageTx">
     <div class="page-top">
-      <button class="btn-cancel" data-close="pageOp">Cancelar</button>
-      <div class="page-title" id="opTitle">Operação</div>
+      <button class="btn-cancel" data-close="pageTx">Cancelar</button>
+      <div class="page-title" id="txTitle">Transação</div>
       <div style="width:86px"></div>
     </div>
 
-    <div class="field" id="opTypeField">
+    <div class="field">
+      <label>Operação *</label>
+      <div class="select-wrap">
+        <select id="txOp"></select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Descrição</label>
+      <input type="text" id="txDesc" placeholder="Ex.: almoço no shopping" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label>Valor</label>
+      <input type="tel" class="amount" id="txAmount" inputmode="numeric" placeholder="R$ 0,00" autocomplete="off">
+    </div>
+
+    <div class="field" id="txWalletField" style="display:none">
+      <label>Fonte · Carteira</label>
+      <div class="wallet-scroll" id="txWalletList"></div>
+    </div>
+
+    <button class="btn-save" id="txSave">Salvar</button>
+  </div>
+
+  <!-- ============ PÁGINA OPERAÇÕES ============ -->
+  <div class="page" id="pageOps">
+    <div class="page-top">
+      <button class="btn-cancel" data-close="pageOps">Cancelar</button>
+      <div class="page-title">Operações</div>
+      <div style="width:86px"></div>
+    </div>
+
+    <div class="field">
+      <label>Nome da operação</label>
+      <input type="text" id="opName" placeholder="Ex.: Mercado, Salário, Transporte" autocomplete="off">
+    </div>
+
+    <div class="field">
       <label>Tipo</label>
       <div class="segment">
         <button id="segReceita">Receita</button>
@@ -432,28 +517,10 @@
       </div>
     </div>
 
-    <div class="field">
-      <label>Descrição</label>
-      <input type="text" id="opDesc" placeholder="Ex.: almoço no shopping" autocomplete="off">
-    </div>
+    <button class="btn-save" id="opSave">Salvar operação</button>
 
-    <div class="field">
-      <label># Categoria</label>
-      <input type="text" id="opTag" placeholder="#mercado" autocomplete="off">
-      <div class="tag-scroll" id="tagList"></div>
-    </div>
-
-    <div class="field">
-      <label>Valor (R$)</label>
-      <input type="tel" id="opAmount" inputmode="decimal" placeholder="0,00" autocomplete="off">
-    </div>
-
-    <div class="field" id="opWalletField" style="display:none">
-      <label>Fonte · Carteira</label>
-      <div class="wallet-scroll" id="opWalletList"></div>
-    </div>
-
-    <button class="btn-save" id="opSave">Salvar</button>
+    <div class="divider">Operações cadastradas</div>
+    <div id="opsList"></div>
   </div>
 
   <!-- ============ PÁGINA CARTEIRA ============ -->
@@ -464,13 +531,24 @@
       <div style="width:86px"></div>
     </div>
 
+    <div class="totals-row">
+      <div class="total-card receitas">
+        <div class="tc-label"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 19V5m0 0-6 6m6-6 6 6"/></svg> Receitas</div>
+        <div class="tc-value" id="cardReceitas">R$ 0,00</div>
+      </div>
+      <div class="total-card despesas">
+        <div class="tc-label"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14m0 0-6-6m6 6 6-6"/></svg> Despesas</div>
+        <div class="tc-value" id="cardDespesas">R$ 0,00</div>
+      </div>
+    </div>
+
     <div class="field">
       <label>Título</label>
       <input type="text" id="wTitle" placeholder="Ex.: Salário" autocomplete="off">
     </div>
     <div class="field">
-      <label>Valor (R$)</label>
-      <input type="tel" id="wAmount" inputmode="decimal" placeholder="2000,00" autocomplete="off">
+      <label>Valor</label>
+      <input type="tel" class="amount" id="wAmount" inputmode="numeric" placeholder="R$ 2.000,00" autocomplete="off">
     </div>
     <button class="btn-save" id="wSave">Adicionar à carteira</button>
 
@@ -489,7 +567,7 @@
 const now = new Date();
 const ctx = {
   year: now.getFullYear(),
-  month: now.getMonth(),                                        // 0-based
+  month: now.getMonth(),
   today: now.getDate(),
   daysInMonth: new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
 };
@@ -499,366 +577,32 @@ const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','A
 document.getElementById('monthLabel').textContent = `${MONTHS[ctx.month]} · ${ctx.year} · ${ctx.daysInMonth} dias`;
 
 /* =================================================================
+   MASK BRL — digita só dígitos, formata como moeda (centavos)
+================================================================= */
+function attachBRLMask(input) {
+  input.addEventListener('input', () => {
+    const digits = input.value.replace(/\D/g, '').slice(0, 12); // unsigned por natureza
+    input.dataset.cents = digits;
+    input.value = digits ? BRL.format(Number(digits) / 100) : '';
+  });
+}
+function maskValue(input) {
+  return Number(input.dataset.cents || 0) / 100;
+}
+function clearMask(input) {
+  input.value = '';
+  input.dataset.cents = '';
+}
+
+/* =================================================================
    INDEXEDDB — dados brutos (transações + carteira)
 ================================================================= */
+const DB_NAME = 'cubs-finance';
 let db;
 function openDB() {
   return new Promise((res, rej) => {
-    const req = indexedDB.open('cubs-finance', 1);
+    const req = indexedDB.open(DB_NAME, 1);
     req.onupgradeneeded = e => {
       const d = e.target.result;
       if (!d.objectStoreNames.contains('transactions')) {
-        const t = d.createObjectStore('transactions', { keyPath: 'id', autoIncrement: true });
-        t.createIndex('byDate', 'date');
-      }
-      if (!d.objectStoreNames.contains('wallet')) {
-        d.createObjectStore('wallet', { keyPath: 'id', autoIncrement: true });
-      }
-    };
-    req.onsuccess = e => { db = e.target.result; res(); };
-    req.onerror = () => rej(req.error);
-  });
-}
-function dbAdd(store, obj) {
-  return new Promise((res, rej) => {
-    const tx = db.transaction(store, 'readwrite');
-    tx.objectStore(store).add(obj);
-    tx.oncomplete = res;
-    tx.onerror = () => rej(tx.error);
-  });
-}
-function dbAll(store) {
-  return new Promise((res, rej) => {
-    const req = db.transaction(store, 'readonly').objectStore(store).getAll();
-    req.onsuccess = () => res(req.result);
-    req.onerror = () => rej(req.error);
-  });
-}
-
-/* =================================================================
-   LOCALSTORAGE — pré-definições / state (#tags e tipo por tag)
-================================================================= */
-const LS = {
-  getTags: () => JSON.parse(localStorage.getItem('cubs.tags') || '[]'),
-  saveTag(tag) {
-    const tags = LS.getTags();
-    if (!tags.includes(tag)) { tags.unshift(tag); localStorage.setItem('cubs.tags', JSON.stringify(tags)); }
-  },
-  getTagTypes: () => JSON.parse(localStorage.getItem('cubs.tagTypes') || '{}'),
-  saveTagType(tag, type) {
-    const m = LS.getTagTypes(); m[tag] = type;
-    localStorage.setItem('cubs.tagTypes', JSON.stringify(m));
-  }
-};
-
-/* =================================================================
-   GRID POINTS — 1 célula por dia do mês corrente
-   maxSpendPerDay dinâmico: o maior gasto diário = 100% de opacidade
-================================================================= */
-const gridEl = document.getElementById('gridPoints');
-const cellInfoEl = document.getElementById('cellInfo');
-const insightsEl = document.getElementById('insights');
-
-function buildGrid() {
-  gridEl.innerHTML = '';
-  for (let d = 1; d <= ctx.daysInMonth; d++) {
-    const c = document.createElement('div');
-    c.className = 'grid-cell' + (d === ctx.today ? ' today' : '');
-    c.dataset.day = d;
-    c.innerHTML = '<div class="fill"></div>';
-    c.addEventListener('click', () => showCellInfo(d));
-    gridEl.appendChild(c);
-  }
-}
-
-let daySpend = {};  // { dia: total de despesas }
-
-async function renderGrid() {
-  const all = await dbAll('transactions');
-  daySpend = {};
-  for (const t of all) {
-    const dt = new Date(t.date);
-    if (t.type === 'despesa' && dt.getFullYear() === ctx.year && dt.getMonth() === ctx.month) {
-      const d = dt.getDate();
-      daySpend[d] = (daySpend[d] || 0) + t.amount;
-    }
-  }
-  const maxSpendPerDay = Math.max(0, ...Object.values(daySpend));
-
-  document.querySelectorAll('.grid-cell').forEach(cell => {
-    const d = +cell.dataset.day;
-    const v = daySpend[d] || 0;
-    const fill = cell.querySelector('.fill');
-    fill.style.opacity = (v > 0 && maxSpendPerDay > 0)
-      ? Math.max(0.15, v / maxSpendPerDay).toFixed(2)
-      : 0;
-  });
-
-  renderInsights(all);
-}
-
-function showCellInfo(d) {
-  const v = daySpend[d] || 0;
-  cellInfoEl.textContent = `Dia ${d} · ${v > 0 ? BRL.format(v) : 'sem gastos'}`;
-}
-
-/* =================================================================
-   INSIGHT — "você gastou o relativo a N dias do seu Salário"
-   valor/dia da fonte = amount / diasDoMês
-================================================================= */
-async function renderInsights(all) {
-  const wallet = await dbAll('wallet');
-  if (!wallet.length) { insightsEl.innerHTML = ''; return; }
-
-  const spentByWallet = {};
-  for (const t of all) {
-    const dt = new Date(t.date);
-    if (t.type === 'despesa' && t.walletId && dt.getFullYear() === ctx.year && dt.getMonth() === ctx.month) {
-      spentByWallet[t.walletId] = (spentByWallet[t.walletId] || 0) + t.amount;
-    }
-  }
-
-  const lines = [];
-  for (const w of wallet) {
-    const spent = spentByWallet[w.id];
-    if (!spent) continue;
-    const perDay = w.amount / ctx.daysInMonth;
-    const days = spent / perDay;
-    lines.push(`Você gastou o relativo a <strong>${days.toFixed(1)} dias</strong> do seu ${w.title}.`);
-  }
-  insightsEl.innerHTML = lines.join('<br>');
-}
-
-/* =================================================================
-   FAB — slide-select: segura, desliza entre opções, solta pra escolher
-================================================================= */
-const fab = document.getElementById('fab');
-const slideMenu = document.getElementById('slideMenu');
-const opts = [...slideMenu.querySelectorAll('.slide-opt')];
-let sliding = false;
-let hotOpt = null;
-
-function setHot(el) {
-  if (hotOpt === el) return;
-  opts.forEach(o => o.classList.remove('hot'));
-  hotOpt = el;
-  if (el) { el.classList.add('hot'); if (navigator.vibrate) navigator.vibrate(8); }
-}
-
-function optAtX(x) {
-  for (const o of opts) {
-    const r = o.getBoundingClientRect();
-    if (x >= r.left - 5 && x <= r.right + 5) return o;
-  }
-  return null;
-}
-
-function slideStart() {
-  sliding = true;
-  hotOpt = null;
-  slideMenu.classList.add('open');
-}
-function slideMove(x) {
-  if (!sliding) return;
-  setHot(optAtX(x));
-}
-function slideEnd() {
-  if (!sliding) return;
-  sliding = false;
-  slideMenu.classList.remove('open');
-  const act = hotOpt ? hotOpt.dataset.act : null;
-  setHot(null);
-  if (act) runAction(act);
-}
-
-fab.addEventListener('touchstart', e => { e.preventDefault(); slideStart(); }, { passive: false });
-document.addEventListener('touchmove', e => { if (sliding) { e.preventDefault(); slideMove(e.touches[0].clientX); } }, { passive: false });
-document.addEventListener('touchend', slideEnd);
-document.addEventListener('touchcancel', slideEnd);
-/* fallback mouse (teste em desktop) */
-fab.addEventListener('mousedown', e => { e.preventDefault(); slideStart(); });
-document.addEventListener('mousemove', e => slideMove(e.clientX));
-document.addEventListener('mouseup', slideEnd);
-
-/* =================================================================
-   PÁGINAS
-================================================================= */
-const pageOp = document.getElementById('pageOp');
-const pageWallet = document.getElementById('pageWallet');
-document.querySelectorAll('[data-close]').forEach(b =>
-  b.addEventListener('click', () => document.getElementById(b.dataset.close).classList.remove('open'))
-);
-
-function runAction(act) {
-  if (act === 'receita')  openOperation('receita', true);
-  if (act === 'despesa')  openOperation('despesa', true);
-  if (act === 'operacao') openOperation('despesa', false);
-  if (act === 'carteira') openWallet();
-}
-
-/* ---------------- Operação ---------------- */
-const opTitle = document.getElementById('opTitle');
-const opTypeField = document.getElementById('opTypeField');
-const segReceita = document.getElementById('segReceita');
-const segDespesa = document.getElementById('segDespesa');
-const opDesc = document.getElementById('opDesc');
-const opTag = document.getElementById('opTag');
-const opAmount = document.getElementById('opAmount');
-const tagListEl = document.getElementById('tagList');
-const opWalletField = document.getElementById('opWalletField');
-const opWalletList = document.getElementById('opWalletList');
-
-let opType = 'despesa';
-let opWalletId = null;
-
-function setOpType(t) {
-  opType = t;
-  segReceita.classList.toggle('on', t === 'receita');
-  segDespesa.classList.toggle('on', t === 'despesa');
-  opWalletField.style.display = (t === 'despesa' && opWalletList.children.length) ? '' : 'none';
-}
-segReceita.addEventListener('click', () => setOpType('receita'));
-segDespesa.addEventListener('click', () => setOpType('despesa'));
-
-async function openOperation(type, lockType) {
-  opDesc.value = ''; opTag.value = ''; opAmount.value = '';
-  opWalletId = null;
-  opTitle.textContent = lockType ? (type === 'receita' ? 'Nova Receita' : 'Nova Despesa') : 'Operação';
-  opTypeField.style.display = lockType ? 'none' : '';
-  renderTagList('');
-  await renderOpWallet();
-  setOpType(type);
-  pageOp.classList.add('open');
-}
-
-/* ScrollList de #tags — filtra conforme digita (localStorage) */
-function renderTagList(filter) {
-  const q = filter.replace(/^#/, '').toLowerCase();
-  const tags = LS.getTags().filter(t => t.toLowerCase().includes(q));
-  tagListEl.innerHTML = '';
-  for (const t of tags) {
-    const b = document.createElement('button');
-    b.className = 'tag-chip' + (opTag.value.replace(/^#/, '') === t ? ' sel' : '');
-    b.textContent = '#' + t;
-    b.addEventListener('click', () => { opTag.value = '#' + t; renderTagList(''); });
-    tagListEl.appendChild(b);
-  }
-}
-opTag.addEventListener('input', () => renderTagList(opTag.value));
-
-/* valor unsigned — bloqueia negativo */
-opAmount.addEventListener('input', () => {
-  opAmount.value = opAmount.value.replace(/[^0-9,\.]/g, '');
-});
-function parseAmount(v) {
-  const n = parseFloat(v.replace(/\./g, '').replace(',', '.'));
-  return isNaN(n) || n < 0 ? 0 : n;
-}
-
-async function renderOpWallet() {
-  const wallet = await dbAll('wallet');
-  opWalletList.innerHTML = '';
-  for (const w of wallet) {
-    const b = document.createElement('button');
-    b.className = 'wallet-pick';
-    b.textContent = `${w.title} · ${BRL.format(w.amount)}`;
-    b.addEventListener('click', () => {
-      opWalletId = (opWalletId === w.id) ? null : w.id;
-      [...opWalletList.children].forEach(c => c.classList.remove('sel'));
-      if (opWalletId === w.id) b.classList.add('sel');
-    });
-    opWalletList.appendChild(b);
-  }
-}
-
-document.getElementById('opSave').addEventListener('click', async () => {
-  const amount = parseAmount(opAmount.value);
-  const tag = opTag.value.replace(/^#/, '').trim().toLowerCase();
-  if (!amount) { toast('Informe um valor maior que zero.'); return; }
-
-  if (tag) { LS.saveTag(tag); LS.saveTagType(tag, opType); }  // pré-definição no localStorage
-
-  const tx = {
-    type: opType,
-    desc: opDesc.value.trim(),
-    tag,
-    amount,
-    walletId: opType === 'despesa' ? opWalletId : null,
-    date: new Date().toISOString()
-  };
-  await dbAdd('transactions', tx);
-  pageOp.classList.remove('open');
-  await renderGrid();
-
-  if (tx.walletId) {
-    const wallet = await dbAll('wallet');
-    const w = wallet.find(x => x.id === tx.walletId);
-    if (w) {
-      const days = amount / (w.amount / ctx.daysInMonth);
-      toast(`Você gastou o relativo a <strong>${days.toFixed(1)} dias</strong> do seu ${w.title}.`);
-      return;
-    }
-  }
-  toast(tx.type === 'receita' ? 'Receita salva.' : 'Despesa salva.');
-});
-
-/* ---------------- Carteira ---------------- */
-const wTitle = document.getElementById('wTitle');
-const wAmount = document.getElementById('wAmount');
-const walletItems = document.getElementById('walletItems');
-
-wAmount.addEventListener('input', () => {
-  wAmount.value = wAmount.value.replace(/[^0-9,\.]/g, '');
-});
-
-async function openWallet() {
-  wTitle.value = ''; wAmount.value = '';
-  await renderWalletItems();
-  pageWallet.classList.add('open');
-}
-
-async function renderWalletItems() {
-  const wallet = await dbAll('wallet');
-  walletItems.innerHTML = wallet.length ? '' : '<div class="wallet-empty">Nenhuma fonte ainda. Adicione seu salário acima.</div>';
-  for (const w of wallet) {
-    const div = document.createElement('div');
-    div.className = 'wallet-item';
-    div.innerHTML = `
-      <div class="w-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M16 15h.01"/></svg></div>
-      <div><div class="w-tt">${w.title}</div><div class="w-am">${BRL.format(w.amount)} · ${BRL.format(w.amount / ctx.daysInMonth)}/dia</div></div>`;
-    walletItems.appendChild(div);
-  }
-}
-
-document.getElementById('wSave').addEventListener('click', async () => {
-  const amount = parseAmount(wAmount.value);
-  const title = wTitle.value.trim();
-  if (!title || !amount) { toast('Preencha título e valor.'); return; }
-  await dbAdd('wallet', { title, amount });
-  wTitle.value = ''; wAmount.value = '';
-  await renderWalletItems();
-  await renderGrid();
-  toast(`<strong>${title}</strong> adicionado à carteira.`);
-});
-
-/* ---------------- toast ---------------- */
-let toastTimer;
-function toast(html) {
-  const t = document.getElementById('toast');
-  t.innerHTML = html;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 4200);
-}
-
-/* =================================================================
-   BOOT
-================================================================= */
-(async () => {
-  await openDB();
-  buildGrid();
-  await renderGrid();
-})();
-</script>
-</body>
-</html>
+        const t = d.createObjectStore('transactions', { keyPath: '
